@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:sec="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+    http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security-2.0.4.xsd">
+
+	<!-- auto-config 自动配置常用的权限控制机制 -->
+	<!-- servlet-api-provision 禁止保存登录之前的请求 -->
+	<!-- access-denied-page 访问未授权时的显示页面 -->
+	<sec:http auto-config="true" access-decision-manager-ref="accessDecisionManager" servlet-api-provision="false" access-denied-page="/html/error_page_access_denied.html">
+
+		<!-- 无需进行权限验证的路径 -->
+		<sec:intercept-url pattern="/admin/admin!login.action" filters="none" />
+		<sec:intercept-url pattern="/template/*" filters="none" />
+
+		<!-- login-page 登录页面 -->
+		<!-- default-target-url 登录成功后跳转的URL -->
+		<!-- always-use-default-target 是否登录后必须访问default-target-url -->
+		<!-- authentication-failure-url 登录失败后跳转的URL -->
+		<sec:form-login login-page="/admin/admin!login.action" login-processing-url="/admin/loginVerify" default-target-url="/admin/admin!main.action"
+			authentication-failure-url="/admin/admin!login.action" always-use-default-target="true"  />
+
+		<sec:remember-me key="e37f8888-0ooo-22dd-bd0b-9900211c9a66" />
+
+		<sec:logout invalidate-session="true" logout-success-url="/admin/admin!login.action" logout-url="/admin/logout" />
+
+	</sec:http>
+
+	<!-- 后台管理权限认证 -->
+	<sec:authentication-provider user-service-ref="adminDetailsServiceImpl">
+		<sec:password-encoder hash="md5" />
+	</sec:authentication-provider>
+
+	<sec:authentication-manager alias="authenticationManager" />
+
+	<!-- 定义权限、资源关系 -->
+	<bean id="filterSecurityInterceptor" class="org.springframework.security.intercept.web.FilterSecurityInterceptor">
+		<sec:custom-filter before="FILTER_SECURITY_INTERCEPTOR" />
+		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="accessDecisionManager" ref="accessDecisionManager" />
+		<property name="objectDefinitionSource" ref="adminSecurityDefinitionSource" />
+	</bean>
+	
+	<bean id="accessDecisionManager" class="org.springframework.security.vote.AffirmativeBased">
+		<property name="decisionVoters">
+			<list>
+				<bean class="org.springframework.security.vote.RoleVoter" />
+				<bean class="org.springframework.security.vote.AuthenticatedVoter" />
+			</list>
+		</property>
+	</bean>
+
+</beans>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">  
+<properties>  
+	<comment>IK Analyzer 配置</comment>
+	<!-- 字典配置 -->
+	<entry key="ext_dict">/net/shopxx/dic/shopxx.dic</entry>
+</properties>

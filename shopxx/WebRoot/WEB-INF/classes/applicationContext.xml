@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:oscache="http://www.springmodules.org/schema/oscache"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd http://www.springmodules.org/schema/oscache http://www.springmodules.org/schema/cache/springmodules-oscache.xsd">
+
+	<oscache:config configLocation="classpath:oscache.properties" id="cacheProvider" />
+	<oscache:annotations providerId="cacheProvider">
+		<oscache:caching id="caching" cronExpression="0 1 * * *" refreshPeriod="86400" />
+		<oscache:flushing id="flushing" />
+	</oscache:annotations>
+	
+	<bean id="cacheManager" class="org.springmodules.cache.provider.oscache.OsCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:oscache.properties" />
+    </bean>
+
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	<aop:config proxy-target-class="true" />
+
+	<bean id="freemarkerManager" class="org.apache.struts2.views.freemarker.FreemarkerManager" />
+	
+</beans>
