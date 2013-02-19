@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import net.shopxx.util.SystemConfigUtil;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.stereotype.Component;
 
 import sun.misc.BASE64Decoder;
 
